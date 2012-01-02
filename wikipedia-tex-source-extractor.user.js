@@ -4,6 +4,7 @@
 // @description     Allows you to extract the TeX source from an image of a formula on Wikipedia. Just click on the desired formula and you're good to go.
 // @version			1.0
 // @include			*.wikipedia.org/w*
+// @include			*.wikibooks.org/w*
 // ==/UserScript==
 
 //A thanks for this snippet goes to tghw:
