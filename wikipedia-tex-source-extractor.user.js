@@ -25,10 +25,9 @@ function addExtractor(){
 	$("img.tex").click(function(){
 		var $t = $(this);
 		if(!$t.parent("span").find("#wte_close").length){
-			var a = $t.attr("alt");
-			$t.wrap("<span alt='"+a+"_wte'></span>");
-			$t.parent().append("<input id='wte_texsource_"+counter+"' style='width:250px;padding:5px;border:2px solid #ccc;font: monospace;margin-left:10px;' type='text' value='"+a+"' /> <a style='margin-right:10px;color:red !important;font-weight:bold;' href='javascript:void(0);' id='wte_close'>x</a>");
-			$("#wte_texsource_"+counter).focus().select();
+			$t.wrap("<span></span>");
+			$t.parent().append("<input id='wte_texsource_"+counter+"' style='width:250px;padding:5px;border:2px solid #ccc;font: monospace;margin-left:10px;' type='text' /> <a style='margin-right:10px;color:red !important;font-weight:bold;' href='javascript:void(0);' id='wte_close'>x</a>");
+			$("#wte_texsource_"+counter).val($t.attr("alt")).focus().select();
 			counter++;
 		}
 	});
