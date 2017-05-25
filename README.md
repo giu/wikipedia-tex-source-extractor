@@ -8,4 +8,4 @@ You can find the [WTSE Greasemonkey script on userscripts.org](http://userscript
 
 ## Screenshot
 
-<img src="wikipedia-tex-source-extractor/raw/master/wikipedia-tex-source-extractor.png" alt="Wikipedia TeX Source Extractor - Allows you to extract the TeX source behind an image of a formula on Wikipedia" />
+<img src="https://raw.githubusercontent.com/giu/wikipedia-tex-source-extractor/master/wikipedia-tex-source-extractor.png" alt="Wikipedia TeX Source Extractor - Allows you to extract the TeX source behind an image of a formula on Wikipedia" />
