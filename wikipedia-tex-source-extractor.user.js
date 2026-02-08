@@ -1,32 +1,72 @@
 // ==UserScript==
 // @name             Wikipedia TeX Source Extractor
 // @namespace        http://giu.me
-// @description      Allows you to extract the TeX source from an image of a formula on Wikipedia. Just click on the desired formula and you're good to go.
-// @require          http://ajax.googleapis.com/ajax/libs/jquery/1.7.0/jquery.min.js
-// @version          1.0
-// @include          *.wikipedia.org/w*
-// @include          *.wikibooks.org/w*
+// @description      Extract TeX source from Wikipedia formula images
+// @version          2.1
+// @match            https://*.wikipedia.org/*
+// @match            https://*.wikibooks.org/*
+// @grant            none
 // ==/UserScript==
 
-$(document).ready(function() {  
+(function() {
+  'use strict';
+
   var counter = 0;
-  $("img.mwe-math-fallback-image-inline").click(function(){
-    var $t = $(this);
-    if(!$t.parent("span").find("#wte_close").length){
-      $t.wrap("<span></span>");
-      $t.parent().append("<input id='wte_texsource_"+counter+"' style='width:250px;padding:5px;border:2px solid #ccc;font: monospace;margin-left:10px;' type='text' /> <a style='margin-right:10px;color:red !important;font-weight:bold;' href='javascript:void(0);' id='wte_close'>x</a>");
-      $("#wte_texsource_"+counter).val($t.attr("alt")).focus().select();
+
+  document.addEventListener('click', function(e) {
+    var img = e.target;
+
+    // Check if clicked on a math formula image
+    if (img.tagName === 'IMG' && (
+        img.classList.contains('mwe-math-fallback-image-inline') ||
+        img.classList.contains('mwe-math-fallback-image-display')
+    )) {
+      // Check if already has input
+      if (img.parentNode.querySelector('.wte_input')) {
+        return;
+      }
+
+      // Find the TeX source from the MathML element
+      var texSource = img.alt; // fallback
+      var mathElement = img.parentNode.querySelector('math');
+      if (mathElement && mathElement.getAttribute('alttext')) {
+        texSource = mathElement.getAttribute('alttext');
+      }
+
+      // Create input field
+      var input = document.createElement('input');
+      input.className = 'wte_input';
+      input.type = 'text';
+      input.value = texSource;
+      input.style.cssText = 'width:400px;padding:5px;border:2px solid #3366cc;font-family:monospace;margin-left:10px;font-size:14px;';
+
+      // Create close button
+      var closeBtn = document.createElement('button');
+      closeBtn.className = 'wte_close';
+      closeBtn.textContent = '×';
+      closeBtn.style.cssText = 'margin-left:5px;padding:2px 8px;color:white;background:#cc0000;border:none;font-weight:bold;cursor:pointer;font-size:16px;';
+
+      // Insert after the image
+      img.parentNode.insertBefore(input, img.nextSibling);
+      input.parentNode.insertBefore(closeBtn, input.nextSibling);
+
+      input.focus();
+      input.select();
       counter++;
     }
-  });
 
-  $("[id^=wte_t]").live("click", function(){
-    $(this).focus().select();
-  });
+    // Handle input click (reselect)
+    if (e.target.classList.contains('wte_input')) {
+      e.target.select();
+    }
 
-  $("#wte_close").live("click", function(){
-    var $t = $(this);
-    $t.prev().remove();
-    $t.remove();
+    // Handle close button
+    if (e.target.classList.contains('wte_close')) {
+      e.preventDefault();
+      var btn = e.target;
+      var input = btn.previousElementSibling;
+      if (input) input.remove();
+      btn.remove();
+    }
   });
-});
+})();
